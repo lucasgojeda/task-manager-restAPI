@@ -1,6 +1,5 @@
 const { response, request } = require("express");
 const { Task } = require("../models");
-const { ObjectId } = require("mongoose").Types;
 
 const getTasks = async (req = request, res = response) => {
 
@@ -8,7 +7,7 @@ const getTasks = async (req = request, res = response) => {
 
   try {
 
-    const tasks = await Task.find({ id: user._id });
+    const tasks = await Task.find({ user: user._id });
 
     res.status(200).json({
       msg: "OK",
