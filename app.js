@@ -7,7 +7,8 @@ require('dotenv').config();
 
 const publicPath = path.join(__dirname, '..', 'public');
 
-const { dbConnection } = require('./database/config')
+const { dbConnection } = require('./database/config');
+const { swaggerDocs } = require('./v1/swagger');
 
 class Server {
 
@@ -44,23 +45,22 @@ class Server {
         this.app.use(express.json());
 
         this.app.use(express.static(publicPath));
+
+        /** Swagger docs */
+        swaggerDocs(this.app, this.port)
     };
 
     routes() {
         this.app.use(this.paths.auth, require('./routes/auth.routes'));
         this.app.use(this.paths.task, require('./routes/task.routes'));
-
-        this.app.get('*', (req, res) => {
-            res.sendFile(path.join(publicPath, 'index.html')), function (err) {
-                if (err) {
-                    res.status(500).send(err)
-                }
-            };
-        });
     };
     listen() {
         this.app.listen(this.port, () => {
-            console.log('Server listening on port: ', this.port);
+            console.log(
+                "\x1b[90m",
+                'Server listening on port: ',
+                this.port
+            );
         });
     };
 };
@@ -69,4 +69,4 @@ const server = new Server();
 
 server.listen();
 
- 
+

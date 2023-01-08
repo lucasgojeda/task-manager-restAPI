@@ -37,9 +37,7 @@ const createTask = async (req, res = response) => {
 
     const newTask = new Task(data);
 
-    const savedTask = await newTask.save();
-
-    const task = await Task.findById(savedTask._id).populate('user', '_id name email');
+    const task = await newTask.save();
 
     res.status(200).json({
       msg: "OK",
